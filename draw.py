@@ -5,20 +5,43 @@ import math
 MAX_STEPS = 100
 
 def add_polygon( points, x0, y0, z0, x1, y1, z1, x2, y2, z2 ):
-    add_point(x0, y0, z0)
-    add_point(x1, y1, z1)
-    add_point(x2, y2, z2)
+    add_point(points, x0, y0, z0)
+    add_point(points, x1, y1, z1)
+    add_point(points, x2, y2, z2)
 
 def draw_polygons( points, screen, color ):
     x = 0
     while x < len(points):
+        print points[x]
+        print points[x+1]
+        print points[x+2]
         draw_line(screen, points[x][0], points[x][1], points[x+1][0], points[x+1][1], color)
         draw_line(screen, points[x+1][0], points[x+1][1], points[x+2][0], points[x+2][1], color)
         draw_line(screen, points[x][0], points[x][1], points[x+2][0], points[x+2][1], color)
         x += 3
 
 def add_box( points, x, y, z, width, height, depth ):
-    pass
+    x1 = x + width
+    y1 = y - height
+    z1 = z - depth
+
+    add_polygon(points, x, y, z, x, y1, z, x1, y1, z)
+    add_polygon(points, x1, y1, z, x1, y, z, x, y, z)
+
+    add_polygon(points, x, y, z1, x, y, z, x1, y, z)
+    add_polygon(points, x1, y, z, x1, y, z1, x, y, z1)
+
+    add_polygon(points, x, y1, z, x1, y1, z, x, y1, z1)
+    add_polygon(points, x, y1, z1, x1, y1, z1, x1, y, z)
+
+    add_polygon(points, x1, y, z1, x1, y1, z1, x, y1, z1)
+    add_polygon(points, x, y1, z1, x, y, z1, x1, y, z1)
+
+    add_polygon(points, x, y, z1, x, y1, z1, x, y1, z)
+    add_polygon(points, x, y1, z, x, y, z, x, y, z1)
+
+    add_polygon(points, x1, y, z, x1, y1, z, x1, y1, z1)
+    add_polygon(points, x1, y1, z1, x1, y, z1, x1, y, z)
 
 def add_sphere( points, cx, cy, cz, r, step ):
     
@@ -110,8 +133,6 @@ def generate_torus( points, cx, cy, cz, r0, r1, step ):
             circle+= step
             rotation+= step
 
-
-
 def add_circle( points, cx, cy, cz, r, step ):
     x0 = r + cx
     y0 = cy
@@ -179,53 +200,53 @@ def draw_line( screen, x0, y0, x1, y1, color ):
         while y <= y1:
             plot(screen, color,  x0, y)
             y = y + 1
-elif dy == 0:
-    x = x0
-    while x <= x1:
-        plot(screen, color, x, y0)
-        x = x + 1
-elif dy < 0:
-    d = 0
-    x = x0
-    y = y0
-    while x <= x1:
-        plot(screen, color, x, y)
-        if d > 0:
-            y = y - 1
-            d = d - dx
+    elif dy == 0:
+        x = x0
+        while x <= x1:
+            plot(screen, color, x, y0)
+            x = x + 1
+    elif dy < 0:
+        d = 0
+        x = x0
+        y = y0
+        while x <= x1:
+            plot(screen, color, x, y)
+            if d > 0:
+                y = y - 1
+                d = d - dx
             x = x + 1
             d = d - dy
-elif dx < 0:
-    d = 0
-    x = x0
-    y = y0
-    while y <= y1:
-        plot(screen, color, x, y)
-        if d > 0:
-            x = x - 1
-            d = d - dy
+    elif dx < 0:
+        d = 0
+        x = x0
+        y = y0
+        while y <= y1:
+            plot(screen, color, x, y)
+            if d > 0:
+                x = x - 1
+                d = d - dy
             y = y + 1
             d = d - dx
-elif dx > dy:
-    d = 0
-    x = x0
-    y = y0
-    while x <= x1:
-        plot(screen, color, x, y)
-        if d > 0:
-            y = y + 1
-            d = d - dx
+    elif dx > dy:
+        d = 0
+        x = x0
+        y = y0
+        while x <= x1:
+            plot(screen, color, x, y)
+            if d > 0:
+                y = y + 1
+                d = d - dx
             x = x + 1
             d = d + dy
-else:
-    d = 0
-    x = x0
-    y = y0
-    while y <= y1:
-        plot(screen, color, x, y)
-        if d > 0:
-            x = x + 1
-            d = d - dy
+    else:
+        d = 0
+        x = x0
+        y = y0
+        while y <= y1:
+            plot(screen, color, x, y)
+            if d > 0:
+                x = x + 1
+                d = d - dy
             y = y + 1
             d = d + dx
 
