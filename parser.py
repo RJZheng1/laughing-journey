@@ -32,10 +32,10 @@ def parse_file( f, points, transform, screen, color ):
                 add_curve( points, args[0], args[1], args[2], args[3], args[4], args[5], args[6], args[7], .01, 'hermite' )
 
             elif cmd == 'sphere':
-                add_sphere( points, args[0], args[1], 0, args[2], 5 )
+                add_sphere( points, args[0], args[1], 0, args[2], 10 )
 
             elif cmd == 'torus':
-                add_torus( points, args[0], args[1], 0, args[2], args[3], 5 )
+                add_torus( points, args[0], args[1], 0, args[2], args[3], 10 )
 
             elif cmd == 'box':
                 add_box( points, args[0], args[1], args[2], args[3], args[4], args[5] )
@@ -71,15 +71,18 @@ def parse_file( f, points, transform, screen, color ):
         elif cmd in ['display', 'save' ]:
             screen = new_screen()
             draw_polygons( points, screen, color )
-            
+
             if cmd == 'display':
                 display( screen )
 
             elif cmd == 'save':
                 c+= 1
                 save_extension( screen, commands[c].strip() )
+                
         elif cmd == 'quit':
             return    
+        
         elif cmd[0] != '#':
             print 'Invalid command: ' + cmd
+            
         c+= 1
