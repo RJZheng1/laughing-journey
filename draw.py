@@ -12,10 +12,17 @@ def add_polygon( points, x0, y0, z0, x1, y1, z1, x2, y2, z2 ):
 def draw_polygons( points, screen, color ):
     x = 0
     while x < len(points):
-        draw_line(screen, points[x][0], points[x][1], points[x+1][0], points[x+1][1], color)
-        draw_line(screen, points[x+1][0], points[x+1][1], points[x+2][0], points[x+2][1], color)
-        draw_line(screen, points[x][0], points[x][1], points[x+2][0], points[x+2][1], color)
+        if cull(points[x], points[x+1], [0, 0, -1]):
+            draw_line(screen, points[x][0], points[x][1], points[x+1][0], points[x+1][1], color)
+            draw_line(screen, points[x+1][0], points[x+1][1], points[x+2][0], points[x+2][1], color)
+            draw_line(screen, points[x][0], points[x][1], points[x+2][0], points[x+2][1], color)
         x += 3
+
+def cull(a, b, v):
+    n = [a[1]*b[2] - a[2]*b[1],
+         a[2]*b[0] - a[0]*b[2],
+         a[0]*b[1] - a[1]*b[0]]
+    return n[0] * v[0] + n[1] * v[1] + n[2] * v[2] < 0
 
 def add_box( points, x, y, z, width, height, depth ):
     x1 = x + width
@@ -111,7 +118,7 @@ def generate_torus( points, cx, cy, cz, r0, r1, step ):
         while circle < circ_stop:
             
             circ = float(circle) / MAX_STEPS
-            
+
             point_i = [(x(circ, rot)), (y(circ, rot)), (z(circ, rot))]
             point_i1 = [(x(circ+step/MAX_STEPS, rot)), (y(circ+step/MAX_STEPS, rot)), (z(circ+step/MAX_STEPS, rot))]
             point_in = [(x(circ, rot+step/MAX_STEPS)), (y(circ, rot+step/MAX_STEPS)), (z(circ, rot+step/MAX_STEPS))]

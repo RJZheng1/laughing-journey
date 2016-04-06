@@ -32,10 +32,10 @@ def parse_file( f, points, transform, screen, color ):
                 add_curve( points, args[0], args[1], args[2], args[3], args[4], args[5], args[6], args[7], .01, 'hermite' )
 
             elif cmd == 'sphere':
-                add_sphere( points, args[0], args[1], 0, args[2], 10 )
+                add_sphere( points, args[0], args[1], 0, args[2], 5 )
 
             elif cmd == 'torus':
-                add_torus( points, args[0], args[1], 0, args[2], args[3], 10 )
+                add_torus( points, args[0], args[1], 0, args[2], args[3], 5 )
 
             elif cmd == 'box':
                 add_box( points, args[0], args[1], args[2], args[3], args[4], args[5] )

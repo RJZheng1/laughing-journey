@@ -1,8 +1,6 @@
 sphere
 0 0 200
 ident
-yrotate
-90
 translate
 250 250 0
 apply
