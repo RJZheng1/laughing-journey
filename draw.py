@@ -81,9 +81,12 @@ def generate_sphere( points, cx, cy, cz, r, step ):
             point_i1 = [(x(circ+step/MAX_STEPS, rot)), (y(circ+step/MAX_STEPS, rot)), (z(circ+step/MAX_STEPS, rot))]
             point_in = [(x(circ, rot+step/MAX_STEPS)), (y(circ, rot+step/MAX_STEPS)), (z(circ, rot+step/MAX_STEPS))]
             point_in1 = [(x(circ+step/MAX_STEPS, rot+step/MAX_STEPS)), (y(circ+step/MAX_STEPS, rot+step/MAX_STEPS)), (z(circ+step/MAX_STEPS, rot+step/MAX_STEPS))]
-
+            '''
             add_polygon(points, point_i[0], point_i[1], point_i[2], point_i1[0], point_i1[1], point_i1[2], point_in1[0], point_in1[1], point_in1[2])
             add_polygon(points, point_i[0], point_i[1], point_i[2], point_in[0], point_in[1], point_in[2], point_in1[0], point_in1[1], point_in1[2])
+            '''
+            add_polygon(points, point_in[0], point_in[1], point_in[2], point_in1[0], point_in1[1], point_in1[2], point_i1[0], point_i1[1], point_i1[2])
+            add_polygon(points, point_i1[0], point_i1[1], point_i1[2], point_i[0], point_i[1], point_i[2], point_in[0], point_in[1], point_in[2])
 
             circle+= step
 
@@ -119,19 +122,27 @@ def generate_torus( points, cx, cy, cz, r0, r1, step ):
             
             circ = float(circle) / MAX_STEPS
 
+# Original point
             point_i = [(x(circ, rot)), (y(circ, rot)), (z(circ, rot))]
+# Next point down on same circle 
             point_i1 = [(x(circ+step/MAX_STEPS, rot)), (y(circ+step/MAX_STEPS, rot)), (z(circ+step/MAX_STEPS, rot))]
+# Original point rotated
             point_in = [(x(circ, rot+step/MAX_STEPS)), (y(circ, rot+step/MAX_STEPS)), (z(circ, rot+step/MAX_STEPS))]
+# Next point rotated
             point_in1 = [(x(circ+step/MAX_STEPS, rot+step/MAX_STEPS)), (y(circ+step/MAX_STEPS, rot+step/MAX_STEPS)), (z(circ+step/MAX_STEPS, rot+step/MAX_STEPS))]
 
+            '''
             print point_i
             print point_i1
             print point_in
             print point_in1
             
+            
             add_polygon(points, point_i[0], point_i[1], point_i[2], point_i1[0], point_i1[1], point_i1[2], point_in1[0], point_in1[1], point_in1[2])
             add_polygon(points, point_i[0], point_i[1], point_i[2], point_in[0], point_in[1], point_in[2], point_in1[0], point_in1[1], point_in1[2])
-
+            '''
+            add_polygon(points, point_in[0], point_in[1], point_in[2], point_in1[0], point_in1[1], point_in1[2], point_i1[0], point_i1[1], point_i1[2])
+            add_polygon(points, point_i1[0], point_i1[1], point_i1[2], point_i[0], point_i[1], point_i[2], point_in[0], point_in[1], point_in[2])
             circle+= step
 
         rotation+= step

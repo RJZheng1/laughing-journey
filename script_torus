@@ -1,6 +1,8 @@
 torus
-0 0 200 50
+0 0 50 200
 ident
+xrotate
+90
 translate
 250 250 0
 apply
