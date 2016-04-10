@@ -22,28 +22,28 @@ def cull(a, b, v):
     n = [a[1]*b[2] - a[2]*b[1],
          a[2]*b[0] - a[0]*b[2],
          a[0]*b[1] - a[1]*b[0]]
-    return n[0] * v[0] + n[1] * v[1] + n[2] * v[2] > 0
+    return n[0] * v[0] + n[1] * v[1] + n[2] * v[2] < 0
 
 def add_box( points, x, y, z, width, height, depth ):
     x1 = x + width
     y1 = y - height
     z1 = z - depth
-# front 012,230
+# front
     add_polygon(points, x, y, z, x, y1, z, x1, y1, z)
     add_polygon(points, x1, y1, z, x1, y, z, x, y, z)
-# top 403,374
+# top
     add_polygon(points, x, y, z1, x, y, z, x1, y, z)
     add_polygon(points, x1, y, z, x1, y, z1, x, y, z1)
-# bottom 621,156
+# bottom
     add_polygon(points, x1, y1, z1, x1, y1, z, x, y1, z)
     add_polygon(points, x, y1, z, x, y1, z1, x1, y1, z1)
-# back 765,547
+# back
     add_polygon(points, x1, y, z1, x1, y1, z1, x, y1, z1)
     add_polygon(points, x, y1, z1, x, y, z1, x1, y, z1)
-# left 451,104
+# left
     add_polygon(points, x, y, z1, x, y1, z1, x, y1, z)
     add_polygon(points, x, y1, z, x, y, z, x, y, z1)
-# right 326,673
+# right
     add_polygon(points, x1, y, z, x1, y1, z, x1, y1, z1)
     add_polygon(points, x1, y1, z1, x1, y, z1, x1, y, z)
 
