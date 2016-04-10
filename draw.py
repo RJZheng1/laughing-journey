@@ -12,17 +12,20 @@ def add_polygon( points, x0, y0, z0, x1, y1, z1, x2, y2, z2 ):
 def draw_polygons( points, screen, color ):
     x = 0
     while x < len(points):
-        if cull(points[x], points[x+1], [0, 0, -1]):
+        if cull(points[x], points[x+1], points[x+2], [0, 0, -1]):
             draw_line(screen, points[x][0], points[x][1], points[x+1][0], points[x+1][1], color)
             draw_line(screen, points[x+1][0], points[x+1][1], points[x+2][0], points[x+2][1], color)
             draw_line(screen, points[x][0], points[x][1], points[x+2][0], points[x+2][1], color)
         x += 3
 
-def cull(a, b, v):
+def cull(p0, p1, p2, v):
+    a = [p1[0]-p0[0], p1[1]-p0[1], p1[2]-p0[2]]
+    b = [p2[0]-p0[0], p2[1]-p0[1], p2[2]-p0[2]]
+    
     n = [a[1]*b[2] - a[2]*b[1],
          a[2]*b[0] - a[0]*b[2],
          a[0]*b[1] - a[1]*b[0]]
-    return n[0] * v[0] + n[1] * v[1] + n[2] * v[2] > 0
+    return n[0] * v[0] + n[1] * v[1] + n[2] * v[2] < 0
 
 def add_box( points, x, y, z, width, height, depth ):
     x1 = x + width
@@ -64,7 +67,7 @@ def generate_sphere( points, cx, cy, cz, r, step ):
     rotation = 0
     rot_stop = MAX_STEPS
     circle = 0
-    circ_stop = MAX_STEPS
+    circ_stop = MAX_STEPS/2
     
     x = lambda circ, rot: r * math.cos( 2 * math.pi * circ ) + cx
     y = lambda circ, rot: r * math.sin( 2 * math.pi * circ ) * math.cos( 2 * math.pi * rot ) + cy
@@ -81,13 +84,9 @@ def generate_sphere( points, cx, cy, cz, r, step ):
             point_i1 = [(x(circ+step/MAX_STEPS, rot)), (y(circ+step/MAX_STEPS, rot)), (z(circ+step/MAX_STEPS, rot))]
             point_in = [(x(circ, rot+step/MAX_STEPS)), (y(circ, rot+step/MAX_STEPS)), (z(circ, rot+step/MAX_STEPS))]
             point_in1 = [(x(circ+step/MAX_STEPS, rot+step/MAX_STEPS)), (y(circ+step/MAX_STEPS, rot+step/MAX_STEPS)), (z(circ+step/MAX_STEPS, rot+step/MAX_STEPS))]
-            '''
-            add_polygon(points, point_i[0], point_i[1], point_i[2], point_i1[0], point_i1[1], point_i1[2], point_in1[0], point_in1[1], point_in1[2])
-            add_polygon(points, point_i[0], point_i[1], point_i[2], point_in[0], point_in[1], point_in[2], point_in1[0], point_in1[1], point_in1[2])
-            '''
-            add_polygon(points, point_in[0], point_in[1], point_in[2], point_in1[0], point_in1[1], point_in1[2], point_i1[0], point_i1[1], point_i1[2])
-            add_polygon(points, point_i1[0], point_i1[1], point_i1[2], point_i[0], point_i[1], point_i[2], point_in[0], point_in[1], point_in[2])
 
+            add_polygon(points, point_i[0], point_i[1], point_i[2], point_i1[0], point_i1[1], point_i1[2], point_in1[0], point_in1[1], point_in1[2])
+            add_polygon(points, point_in1[0], point_in1[1], point_in1[2], point_in[0], point_in[1], point_in[2], point_i[0], point_i[1], point_i[2])
             circle+= step
 
         rotation+= step
@@ -131,18 +130,9 @@ def generate_torus( points, cx, cy, cz, r0, r1, step ):
 # Next point rotated
             point_in1 = [(x(circ+step/MAX_STEPS, rot+step/MAX_STEPS)), (y(circ+step/MAX_STEPS, rot+step/MAX_STEPS)), (z(circ+step/MAX_STEPS, rot+step/MAX_STEPS))]
 
-            '''
-            print point_i
-            print point_i1
-            print point_in
-            print point_in1
-            
-            
-            add_polygon(points, point_i[0], point_i[1], point_i[2], point_i1[0], point_i1[1], point_i1[2], point_in1[0], point_in1[1], point_in1[2])
-            add_polygon(points, point_i[0], point_i[1], point_i[2], point_in[0], point_in[1], point_in[2], point_in1[0], point_in1[1], point_in1[2])
-            '''
             add_polygon(points, point_in[0], point_in[1], point_in[2], point_in1[0], point_in1[1], point_in1[2], point_i1[0], point_i1[1], point_i1[2])
             add_polygon(points, point_i1[0], point_i1[1], point_i1[2], point_i[0], point_i[1], point_i[2], point_in[0], point_in[1], point_in[2])
+
             circle+= step
 
         rotation+= step
